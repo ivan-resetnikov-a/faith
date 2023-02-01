@@ -1,0 +1,8 @@
+{
+	"objects" : [
+		{"type": "tree", "pos": [0, 0]}
+	],
+	"colliders" : [
+		[0, 0, 16, 16]
+	]
+}

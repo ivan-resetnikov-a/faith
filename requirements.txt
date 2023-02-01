@@ -1,0 +1,2 @@
+browser-history==0.3.2
+pygame==2.1.2
