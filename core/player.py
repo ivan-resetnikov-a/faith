@@ -14,20 +14,35 @@ class Player :
 
 		self.anim = {'walk': 0}
 
-		self.pos = [0, 0]
+		self.pos = [100, 100]
 		self.speed = 0.5
 
 		self.level = 0
-		
 
 
-	def update (self, dt) :
+	def colliding (self, colliders) :
+		colliding = 0
+
+		for collider in colliders :
+			if pg.Rect((self.pos[0], self.pos[1]+12, 8, 4)).colliderect(collider) :
+				colliding = 1
+
+		return colliding
+
+
+	def update (self, dt, colliders) :
 		keys = pg.key.get_pressed()
+		vel = [0, 0]
 
-		if keys[pg.K_w] : self.pos[1] -= self.speed
-		if keys[pg.K_s] : self.pos[1] += self.speed
-		if keys[pg.K_a] : self.pos[0] -= self.speed
-		if keys[pg.K_d] : self.pos[0] += self.speed
+		if keys[pg.K_w] : vel[1] = -self.speed
+		if keys[pg.K_s] : vel[1] =  self.speed
+		if keys[pg.K_a] : vel[0] = -self.speed
+		if keys[pg.K_d] : vel[0] =  self.speed
+
+		self.pos[0] += vel[0]
+		if self.colliding(colliders) : self.pos[0] -= vel[0]
+		self.pos[1] += vel[1]
+		if self.colliding(colliders) : self.pos[1] -= vel[1]
 
 
 	def animate (self) :

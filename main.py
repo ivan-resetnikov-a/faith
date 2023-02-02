@@ -4,7 +4,7 @@ import core
 
 
 
-class KSP :
+class Faith :
 	def __init__ (self) :
 		# config
 		self.size, self.rez = (1000, 800), (250, 200)
@@ -21,13 +21,20 @@ class KSP :
 
 
 	def update (self) :
-		self.player.update(self.timeMult)
+		self.player.update(self.timeMult, self.colliders)
 
 
 	def render (self) :
 		self.frame.fill((0, 0, 0))
 		################
+		topObjects = []
+		for obj in self.objects :
+			if obj.pos[1]+(obj.img.get_height()*0.5) < self.player.pos[1] : obj.render(self.frame)
+			else : topObjects.append(obj)
+
 		self.player.render(self.frame)
+
+		[obj.render(self.frame) for obj in topObjects]
 		################
 		self.window.blit(pg.transform.scale(self.frame, self.size), (0, 0))
 		self.clock.tick(self.fps)
@@ -47,9 +54,23 @@ class KSP :
 			self.render()
 
 
+	def loadLevel (self) :
+		content = core.loadFromJSON(f'data/faith/world/{self.player.level}.json')
+
+		self.colliders, self.objects = [], []
+
+		# load object
+		[self.objects.append(core.Object(obj['name'], obj['pos'])) for obj in content['objects']]
+
+		# load colliders
+		[self.colliders.append(tuple(collider)) for collider in content['colliders']]
+
+
 	def onStart (self) :
 		self.player = core.Player()
 
+		self.loadLevel()
 
 
-KSP().run()
+
+Faith().run()
