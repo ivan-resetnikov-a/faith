@@ -1,6 +1,6 @@
 from browser_history import get_history
 
-print('== Loading browser history ==')
+print('==== LOADING BROWSER HISTORY ====')
 info = get_history().histories
 
 

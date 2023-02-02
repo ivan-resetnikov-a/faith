@@ -1,4 +1,7 @@
+print('=== LOADING PYGAME ===')
 import pygame as pg
+pg.mixer.init()
+pg.init()
 
 import core
 
@@ -29,7 +32,7 @@ class Faith :
 		################
 		topObjects = []
 		for obj in self.objects :
-			if obj.pos[1]+(obj.img.get_height()*0.5) < self.player.pos[1] : obj.render(self.frame)
+			if obj.pos[1]+(obj.img.get_height()*0.5) < self.player.pos[1]+4 : obj.render(self.frame)
 			else : topObjects.append(obj)
 
 		self.player.render(self.frame)
@@ -55,21 +58,31 @@ class Faith :
 
 
 	def loadLevel (self) :
+		print(f'=== LOADING LEVEL "{self.player.level}" ===')
 		content = core.loadFromJSON(f'data/faith/world/{self.player.level}.json')
+		print('[Y] Reading from file')
 
 		self.colliders, self.objects = [], []
 
 		# load object
 		[self.objects.append(core.Object(obj['name'], obj['pos'])) for obj in content['objects']]
+		print('[Y] Loading objects')
 
 		# load colliders
 		[self.colliders.append(tuple(collider)) for collider in content['colliders']]
+		print('[Y] Loading colliders')
 
 
 	def onStart (self) :
 		self.player = core.Player()
 
 		self.loadLevel()
+
+		pg.mixer.music.load('assets/music/main_menu.ogg')
+		pg.mixer.music.set_volume(0.07)
+		pg.mixer.music.play(-1)
+
+		print('=== GAME STARTED ===')
 
 
 
